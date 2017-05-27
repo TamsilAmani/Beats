@@ -37,6 +37,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         holder.song.setText(song.getSong());
         holder.album.setText(song.getAlbum());
         holder.artist.setText(song.getArtist());
+        holder.albumArt.setImageBitmap(song.getAlbumArt());
     }
 
     @Override
@@ -46,14 +47,14 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView song, album, artist;
-        public ImageView album_art;
+        public ImageView albumArt;
 
         public ViewHolder(View itemView) {
             super(itemView);
             song = (TextView) itemView.findViewById(R.id.song);
             album = (TextView) itemView.findViewById(R.id.album);
             artist = (TextView) itemView.findViewById(R.id.artist);
-            album_art = (ImageView) itemView.findViewById(R.id.album_art);
+            albumArt = (ImageView) itemView.findViewById(R.id.album_art);
         }
     }
 }

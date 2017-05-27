@@ -24,12 +24,16 @@
     <TextView
         android:id="@+id/song"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@id/album_art"
         android:layout_toLeftOf="@+id/song_popup_menu"
         android:layout_toRightOf="@+id/album_art"
-        android:layout_toStartOf="@id/song_popup_menu" />
+        android:layout_toStartOf="@id/song_popup_menu"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/album"
@@ -37,7 +41,9 @@
         android:layout_height="20dp"
         android:layout_below="@+id/song"
         android:layout_toEndOf="@+id/album_art"
-        android:layout_toRightOf="@+id/album_art" />
+        android:layout_toRightOf="@+id/album_art"
+        android:ellipsize="end"
+        android:maxLines="1" />
 
     <TextView
         android:id="@+id/album_artist_separator"
@@ -58,6 +64,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/song"
         android:layout_toEndOf="@+id/album_artist_separator"
-        android:layout_toRightOf="@+id/album_artist_separator" />
+        android:layout_toLeftOf="@+id/song_popup_menu"
+        android:layout_toRightOf="@+id/album_artist_separator"
+        android:layout_toStartOf="@+id/song_popup_menu"
+        android:ellipsize="end"
+        android:maxLines="1" />
 
 </RelativeLayout>

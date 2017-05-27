@@ -1,7 +1,13 @@
 package com.abdulwd.beats.activities;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -10,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.abdulwd.beats.R;
 import com.abdulwd.beats.adapters.LibraryPagerAdapter;
@@ -17,10 +24,13 @@ import com.abdulwd.beats.adapters.LibraryPagerAdapter;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final int READ_EXTERNAL_STORAGE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -33,8 +43,21 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.container);
-        viewPager.setAdapter(new LibraryPagerAdapter(getSupportFragmentManager()));
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                showPermissionRationale();
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        READ_EXTERNAL_STORAGE);
+            }
+        } else {
+            createTabs();
+        }
     }
 
     @Override
@@ -92,5 +115,35 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            createTabs();
+        } else {
+            showPermissionRationale();
+        }
+    }
+
+    private void createTabs() {
+        ViewPager viewPager = (ViewPager) findViewById(R.id.container);
+        viewPager.setAdapter(new LibraryPagerAdapter(getSupportFragmentManager()));
+        viewPager.setOffscreenPageLimit(2);
+    }
+
+    private void showPermissionRationale() {
+        Snackbar.make(findViewById(android.R.id.content),
+                "Please grant permission to read storage",
+                Snackbar.LENGTH_INDEFINITE).setAction("Enable",
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                            requestPermissions(
+                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                    READ_EXTERNAL_STORAGE);
+                    }
+                }).show();
     }
 }
