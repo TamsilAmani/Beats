@@ -35,7 +35,7 @@ public class SongsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initDataSet();
+        initSongsList();
     }
 
     @Nullable
@@ -53,7 +53,7 @@ public class SongsFragment extends Fragment {
         return root;
     }
 
-    void initDataSet() {
+    void initSongsList() {
         ContentResolver contentResolver = getActivity().getContentResolver();
         Cursor musicCursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Audio.Media.TITLE,
